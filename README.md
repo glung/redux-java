@@ -12,7 +12,7 @@ When using Redux-java your application logic is at the center but isolated from 
 
 To accomplish this, Redux takes actions as input and provides a gloval state as the output. The actions are reduced to states using pure functions. This is why your application states are predictables and easy to test. 
 
-Redux has a unidirectional data flow* (from the action to the state) which make it fairly easy to understand. 
+Redux has a unidirectional data flow (from the action to the state) which make it fairly easy to understand. 
 
 # Android 
 Redux-java as been designed with the Android case in mind (it depends on Java7, does not have big dependencies). 
@@ -28,12 +28,8 @@ The project is in early developent and is not yet released.
 - [app-redux-android-drawing](examples/app-redux-android-drawing)
 
 
-# Notes*
+# Notes
 - If you are not familiar with unidirectional data flow, I recommand readling the [Facebook flux documentation](https://facebook.github.io/flux/). 
 - Redux is a simplification of flux created by [Dan Abramov](https://twitter.com/dan_abramov), I also recommend watching this [30' video](https://www.youtube.com/watch?v=xsSnOQynTHs) to understand the principle and motivations of redux.
+- The official and great redux documentation is [here](http://rackt.github.io/redux/docs/introduction/Motivation.html)
 
-
-
-http://rackt.github.io/redux/docs/introduction/Motivation.html
-
-utilizing a unidirectional data flow. It's more of a pattern rather than a formal framework, and you can start using Flux immediately without a lot of new code.

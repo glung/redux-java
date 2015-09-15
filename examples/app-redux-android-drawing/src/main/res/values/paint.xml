@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="queued">#FF000F</color>
+    <color name="interpolated">#00FF00</color>
+    <color name="refresh">#0000FF</color>
+
+</resources>

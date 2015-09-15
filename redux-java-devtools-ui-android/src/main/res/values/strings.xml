@@ -1,0 +1,5 @@
+<resources>
+    <string name="reset">reset</string>
+    <string name="commit">commit</string>
+    <string name="roll_back">roll back</string>
+</resources>

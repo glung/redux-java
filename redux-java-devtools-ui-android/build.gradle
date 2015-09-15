@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 13
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    compile project(":redux-java-devtools")
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+}

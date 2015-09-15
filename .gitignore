@@ -1,0 +1,10 @@
+target/
+build
+app/build/
+.gradle
+.idea
+*.iml
+.java-version
+local.properties
+.DS_Store
+.deploy.time

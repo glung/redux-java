@@ -1,0 +1,7 @@
+include ':redux-java'
+include ':redux-java-devtools'
+include ':redux-java-devtools-ui-android'
+include ':guava-mini'
+include ':examples:app-redux-android-drawing'
+include ':examples:app-redux-android-todolist'
+include ':examples:app-redux-android-todolist-async'

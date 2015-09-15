@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    ext.kotlin_version = '0.12.1230'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+dependencies {
+    compile project(":guava-mini")
+
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile 'junit:junit:4.12'
+}
