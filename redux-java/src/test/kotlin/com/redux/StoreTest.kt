@@ -2,13 +2,12 @@ package com.redux
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
 
 class StoreTest {
 
-    test fun actionShouldBeReduced() {
+    @test fun actionShouldBeReduced() {
         val reducer = Reducer { action: MyAction, state: MyState ->
             when (action.type) {
                 "to reduce" -> MyState("reduced")
@@ -22,7 +21,7 @@ class StoreTest {
         assertEquals("reduced", store.getState().state)
     }
 
-    test fun storeShouldNotifySubscribers() {
+    @test fun storeShouldNotifySubscribers() {
         val store = Store.create(MyState(), Reducer { action: MyAction, state: MyState ->  MyState()})
         val subscriber1 = TestSubscriber()
         val subscriber2 = TestSubscriber()
@@ -36,7 +35,7 @@ class StoreTest {
     }
 
 
-    test fun storeShouldNotNotifyWhenUnsubscribed() {
+    @test fun storeShouldNotNotifyWhenUnsubscribed() {
         val store = Store.create(MyState(), Reducer { action: MyAction, state: MyState ->  MyState()})
         val subscriber1 = TestSubscriber()
         val subscriber2 = TestSubscriber()
