@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">My todo list (Kotlin)</string>
+    <string name="todo_create_hint">What to do ?</string>
+    <string name="clear">clear</string>
+    <string name="delete">delete</string>
+</resources>
