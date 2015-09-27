@@ -37,7 +37,7 @@ public abstract class Store<A extends Action, S extends State> {
 
         @Override public Subscription subscribe(Subscriber subscriber) {
             subscribers.add(subscriber);
-            return new Subscription<>(subscribers, subscriber);
+            return Subscription.create(subscribers, subscriber);
         }
 
         @Override public S getState() {

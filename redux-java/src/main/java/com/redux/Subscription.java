@@ -2,16 +2,22 @@ package com.redux;
 
 import java.util.List;
 
-public class Subscription<A extends Action, S extends State> {
-    private final List<Subscriber> subscribers;
-    private final Subscriber subscriber;
+public abstract class Subscription {
+    private static final Subscription EMPTY = new Subscription() {
+        @Override public void unsubscribe() {}
+    };
 
-    public Subscription(List<Subscriber> subscribers, Subscriber subscriber) {
-        this.subscribers = subscribers;
-        this.subscriber = subscriber;
+    public abstract void unsubscribe();
+
+    public static Subscription create(final List<Subscriber> subscribers, final Subscriber subscriber) {
+        return new Subscription() {
+            @Override public void unsubscribe() {
+                subscribers.remove(subscriber);
+            }
+        };
     }
 
-    public void unsubscribe() {
-        subscribers.remove(subscriber);
+    public static Subscription empty() {
+        return EMPTY;
     }
 }
