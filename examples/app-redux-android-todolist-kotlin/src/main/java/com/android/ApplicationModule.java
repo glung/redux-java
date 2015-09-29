@@ -1,12 +1,10 @@
 package com.android;
 
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
-
 import com.redux.ReduxModule;
-
 import dagger.Module;
 import dagger.Provides;
+
+import android.content.Context;
 
 @Module(
         includes = ReduxModule.class,
@@ -22,9 +20,5 @@ public class ApplicationModule {
 
     @Provides Context provideApplicationContext() {
         return application;
-    }
-
-    @Provides InputMethodManager provideInputMethodManager(Context context) {
-        return (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 }

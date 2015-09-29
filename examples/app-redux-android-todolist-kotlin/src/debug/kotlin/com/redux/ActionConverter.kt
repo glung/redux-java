@@ -6,7 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
-class ActionConverter() : Converter<AppAction> {
+object  ActionConverter : Converter<AppAction> {
     override fun toJson(element: AppAction): String = when (element) {
         is AppAction.Init -> jsonObject(
                 "type" to "Init"

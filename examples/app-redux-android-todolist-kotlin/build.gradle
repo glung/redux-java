@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.neenbedankt.android-apt'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -29,6 +28,8 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         debug.java.srcDirs += 'src/debug/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        release.java.srcDirs += 'src/release/kotlin'
     }
 }
 
@@ -47,7 +48,7 @@ buildscript {
 }
 
 dependencies {
-    apt 'com.squareup.dagger:dagger-compiler:1.2.2'
+    kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
 
     debugCompile project(":redux-java-devtools")
     debugCompile project(":redux-java-devtools-ui-android")

@@ -1,12 +1,13 @@
 package com.redux;
 
-import dagger.Module;
-import dagger.Provides;
-
 import android.content.Context;
 
-import javax.inject.Singleton;
 import java.util.Collections;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 
 @Module(library = true)
 public class ReduxModule {
@@ -16,6 +17,6 @@ public class ReduxModule {
     }
 
     @Provides @Singleton public Store<AppAction, AppState> provideStore() {
-        return Store.create(new AppState(Collections.<Todo>emptyList(), false), new TodoReducer());
+        return Store.create(new AppState(Collections.<Todo>emptyList(), false), com.redux.AppReducerKt.getReducer());
     }
 }
