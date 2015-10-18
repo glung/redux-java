@@ -3,7 +3,7 @@ package com.redux;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static mini.com.google.common.base.Preconditions.checkState;
+import static com.redux.Preconditions.checkState;
 
 public class DevToolAction<A extends Action> implements Action {
     public static final String PERFORM_ACTION = "PERFORM_ACTION";

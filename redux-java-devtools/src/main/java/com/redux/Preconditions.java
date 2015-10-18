@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mini.com.google.common.base;
+package com.redux;
 
 /**
  * Simple static methods to be called at the start of your own methods to verify

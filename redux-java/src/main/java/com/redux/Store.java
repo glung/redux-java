@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static mini.com.google.common.base.Preconditions.checkState;
+import static com.redux.Preconditions.checkState;
 
 public abstract class Store<A extends Action, S extends State> {
 
