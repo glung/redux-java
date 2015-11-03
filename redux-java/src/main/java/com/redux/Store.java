@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.redux.Preconditions.checkState;
-
 public abstract class Store<A extends Action, S extends State> {
 
     static public <A extends Action, S extends State> CoreStore<A, S> create(S initialState, Reducer<A, S> reducer) {
@@ -45,7 +43,9 @@ public abstract class Store<A extends Action, S extends State> {
         }
 
         @Override public void dispatch(final A action) {
-            checkState(!isReducing.get(), "Can not dispatch an action when an other action is being processed");
+            if (isReducing.get()) {
+                throw new IllegalStateException("Can not dispatch an action when an other action is being processed");
+            }
 
             isReducing.set(true);
             currentState = reduce(action, currentState);

@@ -3,8 +3,6 @@ package com.redux;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static com.redux.Preconditions.checkState;
-
 public class DevToolAction<A extends Action> implements Action {
     public static final String PERFORM_ACTION = "PERFORM_ACTION";
     public static final String RESET = "RESET";
@@ -70,10 +68,9 @@ public class DevToolAction<A extends Action> implements Action {
     }
 
     private void assertDevToolActionTypeIs(String... actions) {
-        checkState(
-                Arrays.asList(actions).contains(devToolActionType),
-                String.format(Locale.US, "The dev tool action should be in %s but was %s", Arrays.toString(actions), devToolActionType)
-        );
+        if (!Arrays.asList(actions).contains(devToolActionType)) {
+            throw new IllegalStateException(String.format(Locale.US, "The dev tool action should be in %s but was %s", Arrays.toString(actions), devToolActionType));
+        }
     }
 
 }
