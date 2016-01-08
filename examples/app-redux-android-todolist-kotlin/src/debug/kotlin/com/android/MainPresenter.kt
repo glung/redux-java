@@ -2,7 +2,7 @@ package com.android
 
 import com.android.todolist.R
 import com.redux.AppAction
-import com.redux.DevToolPresenter
+import com.redux.devtools.DevToolPresenter
 import com.redux.AppState
 
 import javax.inject.Inject

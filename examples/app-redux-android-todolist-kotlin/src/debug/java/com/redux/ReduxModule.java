@@ -1,15 +1,22 @@
 package com.redux;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import dagger.Module;
-import dagger.Provides;
-
 import android.content.Context;
 
-import javax.inject.Singleton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.redux.devtools.DevTool;
+import com.redux.devtools.DevToolAction;
+import com.redux.devtools.DevToolPresenter;
+import com.redux.devtools.DevToolState;
+import com.redux.devtools.ApplicationStateMonitor;
+
 import java.io.File;
 import java.util.Collections;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 
 @Module(library = true)
 public class ReduxModule {
@@ -25,9 +32,9 @@ public class ReduxModule {
         final StateConverter statePrettyPrintConverter = new StateConverter(new GsonBuilder().setPrettyPrinting().create());
 
         final AppState appState = new AppState(Collections.<Todo>emptyList(), false);
-        return new DevTool.Builder<>(new AppAction.Init(), appState, com.redux.AppReducerKt.getReducer())
+        return new DevTool.Builder<>(AppAction.Init.INSTANCE, appState, com.redux.AppReducerKt.getReducer())
                 .withMonitor(ApplicationStateMonitor.printStream(System.err, statePrettyPrintConverter))
-                .withSessionPersistence(file, new ActionConverter(), new StateConverter(new Gson()))
+                .withSessionPersistence(file, ActionConverter.INSTANCE, new StateConverter(new Gson()))
                 .create();
     }
 

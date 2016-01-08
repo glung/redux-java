@@ -4,6 +4,7 @@ import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonIOException
+import com.redux.devtools.Converter
 
 class StateConverter(val gson: Gson) : Converter<AppState> {
 

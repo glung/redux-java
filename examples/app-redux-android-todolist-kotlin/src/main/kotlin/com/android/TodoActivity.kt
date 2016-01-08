@@ -23,7 +23,6 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
     @Inject lateinit var store: Store<AppAction, AppState>
     @Inject lateinit var actionCreator: ActionCreator
     private lateinit var adapter: MyAdapter
-    private var subscription: Subscription = Subscription.empty();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,11 +89,11 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
 
         editText().showKeyboard(context)
         bind()
-        subscription = store.subscribe(this)
+        store.subscribe(this)
     }
 
     override fun onPause() {
-        subscription.unsubscribe()
+        store.unsubscribe(this)
         super.onPause()
     }
 

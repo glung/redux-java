@@ -1,6 +1,6 @@
 package com.redux
 
-val reducer: Reducer<AppAction, AppState> = Reducer({ action: AppAction, state: AppState ->
+val reducer = { action: AppAction, state: AppState ->
 
     fun nextFreeIndex(list: List<Todo>): Int {
         return if (list.isEmpty()) 0 else list.last().id + 1;
@@ -15,6 +15,4 @@ val reducer: Reducer<AppAction, AppState> = Reducer({ action: AppAction, state: 
         is AppAction.ClearCompleted -> state.copy(state.list.filter { it.isCompleted.not() })
         is AppAction.Fetching -> state.copy(isFetching = action.isFetching)
     }
-})
-
-
+}

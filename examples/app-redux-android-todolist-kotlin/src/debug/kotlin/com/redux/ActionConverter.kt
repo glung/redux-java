@@ -5,8 +5,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.redux.devtools.Converter
 
-object  ActionConverter : Converter<AppAction> {
+object ActionConverter : Converter<AppAction> {
     override fun toJson(element: AppAction): String = when (element) {
         is AppAction.Init -> jsonObject(
                 "type" to "Init"
