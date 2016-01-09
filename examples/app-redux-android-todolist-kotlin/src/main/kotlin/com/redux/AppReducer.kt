@@ -1,6 +1,6 @@
 package com.redux
 
-val reducer = { action: TodoListAction, state: TodoListState ->
+val todoListReducer = { action: TodoListAction, state: TodoListState ->
 
     fun nextFreeIndex(list: List<Todo>): Int {
         return if (list.isEmpty()) 0 else list.last().id + 1;

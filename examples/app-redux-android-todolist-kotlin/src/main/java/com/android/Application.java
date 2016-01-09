@@ -1,7 +1,5 @@
 package com.android;
 
-import com.redux.ReduxModule;
-
 import dagger.ObjectGraph;
 
 public class Application extends android.app.Application {
@@ -11,10 +9,10 @@ public class Application extends android.app.Application {
 
     @Override
     public void onCreate() {
-		super.onCreate();
+        super.onCreate();
 
         instance = this;
-        objectGraph = ObjectGraph.create(new ApplicationModule(this), new ReduxModule(this));
+        objectGraph = ObjectGraph.create(new ApplicationModule(this));
     }
 
     public static ObjectGraph getObjectGraph() {

@@ -1,15 +1,15 @@
 package com.android;
 
-import com.redux.ReduxModule;
+import android.content.Context;
+
+import com.redux.Store;
+import com.redux.TodoListAction;
+import com.redux.TodoListState;
+
 import dagger.Module;
 import dagger.Provides;
 
-import android.content.Context;
-
-@Module(
-        includes = ReduxModule.class,
-        injects = TodoActivity.class
-)
+@Module(injects = TodoActivity.class)
 public class ApplicationModule {
 
     private final Context application;
@@ -20,5 +20,9 @@ public class ApplicationModule {
 
     @Provides Context provideApplicationContext() {
         return application;
+    }
+
+    @Provides Store<TodoListAction, TodoListState> provideStore() {
+        return ConfigureStoreKt.configureStore(new TodoListState());
     }
 }

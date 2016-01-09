@@ -5,52 +5,53 @@ import com.redux.Subscriber
 
 // action creator
 sealed class DevToolAction() {
-    class PerformAction<AppAction>(val appAction: AppAction) : DevToolAction()
+    class PerformAppAction<AppAction>(val appAction: AppAction) : DevToolAction()
 
-    class ResetAction : DevToolAction()
+    class Reset : DevToolAction()
 
-    class RollbackAction : DevToolAction()
+    class Rollback : DevToolAction()
 
-    class CommitAction : DevToolAction()
+    class Commit : DevToolAction()
 
-    class SweepAction : DevToolAction()
+    class Sweep : DevToolAction()
 
-    class ToggleAction(val index: Int) : DevToolAction()
+    class Toggle(val index: Int) : DevToolAction()
 
-    class JumpToStateAction(val index: Int) : DevToolAction()
+    class JumpToState(val index: Int) : DevToolAction()
 
 }
 
 data class DevToolState<AppAction, AppState>(
         val nextActionId: Int = 0,
         val currentStateIndex: Int = 0,
-        val actionsById: Map<Int, DevToolAction.PerformAction<AppAction>> = emptyMap(), // TODO : INIT ?
+        val actionsById: Map<Int, DevToolAction.PerformAppAction<AppAction>> = emptyMap(), // TODO : INIT ?
         val stagedActionIds: List<Int> = listOf(0),
         val skippedActionIds: List<Int> = emptyList(),
         val committedState: AppState,
         val computedStates: List<AppState> = emptyList()
 )
 
-class DevTools<AppAction, AppState> {
-    lateinit var liftedStore: Store<DevToolAction, DevToolState<AppAction, AppState>>
+// A = AppAction
+// S = AppState
+class DevTools<A, S> {
+    lateinit var liftedStore: Store<DevToolAction, DevToolState<A, S>>
 
-    fun instrument(
-            createStore: (DevToolState<AppAction, AppState>, (DevToolAction, DevToolState<AppAction, AppState>) -> DevToolState<AppAction, AppState>) -> Store<DevToolAction, DevToolState<AppAction, AppState>>
-    ): ((AppAction, AppState) -> AppState, AppState) -> Store<AppAction, AppState> {
-
+    // createStore -> state, reducer -> store
+    // createStore = (DevToolState<A, S>, (DevToolAction, DevToolState<A, S>) -> DevToolState<A, S>) -> Store<DevToolAction, DevToolState<A, S>>
+    fun instrument(): ((DevToolState<A, S>, (DevToolAction, DevToolState<A, S>) -> DevToolState<A, S>) -> Store<DevToolAction, DevToolState<A, S>>) -> (S, (A, S) -> S) -> Store<A, S> {
         /**
          * Runs the reducer on invalidated actions to get a fresh computation log.
          */
-        fun recomputeStates(reducer: (AppAction, AppState) -> AppState, devState: DevToolState<AppAction, AppState>): List<AppState> {
+        fun recomputeStates(reducer: (A, S) -> S, devState: DevToolState<A, S>): List<S> {
 
-            val nextComputedStates = arrayListOf<AppState>()
+            val nextComputedStates = arrayListOf<S>()
             with(devState) {
                 computedStates.mapIndexed { i, state ->
                     val actionId: Int = stagedActionIds[i]
                     val devAction = actionsById[actionId]!!
 
                     val previousState = if (i > 1) nextComputedStates[i - 1] else committedState
-                    val shouldSkip = skippedActionIds.indexOf(actionId) > -1;
+                    val shouldSkip = skippedActionIds.indexOf(actionId) > -1
                     val entry = if (shouldSkip) previousState else reducer(devAction.appAction, previousState)
 
                     nextComputedStates.add(entry);
@@ -62,21 +63,21 @@ class DevTools<AppAction, AppState> {
         /**
          * Lifts an app's action into an action on the lifted store.
          */
-        fun liftAction(action: AppAction): DevToolAction.PerformAction<AppAction> =
-                DevToolAction.PerformAction(action)
+        fun liftAction(action: A): DevToolAction.PerformAppAction<A> =
+                DevToolAction.PerformAppAction(action)
 
         /**
          * Creates a history state reducer from an app's reducer.
          */
         fun liftReducerWith(
-                reducer: (AppAction, AppState) -> AppState,
-                initialState: AppState): (DevToolAction, DevToolState<AppAction, AppState>) -> DevToolState<AppAction, AppState> {
+                reducer: (A, S) -> S,
+                initialState: S): (DevToolAction, DevToolState<A, S>) -> DevToolState<A, S> {
 
             return { liftedAction, liftedState ->
                 val updatedLiftedState = when (liftedAction) {
-                    is DevToolAction.ResetAction ->
-                        DevToolState<AppAction, AppState> (committedState = initialState)
-                    is DevToolAction.CommitAction ->
+                    is DevToolAction.Reset ->
+                        DevToolState<A, S> (committedState = initialState)
+                    is DevToolAction.Commit ->
                         liftedState.copy(
                                 nextActionId = 0,
                                 actionsById = emptyMap(),
@@ -86,7 +87,7 @@ class DevTools<AppAction, AppState> {
                                 currentStateIndex = 0,
                                 computedStates = emptyList()
                         )
-                    is DevToolAction.RollbackAction ->
+                    is DevToolAction.Rollback ->
                         liftedState.copy(
                                 nextActionId = 0,
                                 actionsById = emptyMap(),
@@ -95,7 +96,7 @@ class DevTools<AppAction, AppState> {
                                 currentStateIndex = 0,
                                 computedStates = emptyList()
                         )
-                    is DevToolAction.ToggleAction -> {
+                    is DevToolAction.Toggle -> {
                         val updatedSkippedActions = with (liftedState.skippedActionIds) {
                             if (contains(liftedAction.index)) {
                                 filter { it != liftedAction.index }
@@ -106,9 +107,9 @@ class DevTools<AppAction, AppState> {
 
                         liftedState.copy(skippedActionIds = updatedSkippedActions)
                     }
-                    is DevToolAction.JumpToStateAction ->
+                    is DevToolAction.JumpToState ->
                         liftedState.copy(currentStateIndex = liftedAction.index)
-                    is DevToolAction.SweepAction -> {
+                    is DevToolAction.Sweep -> {
                         val filteredStagedActionIds = liftedState.stagedActionIds.minus(liftedState.skippedActionIds)
                         liftedState.copy(
                                 stagedActionIds = filteredStagedActionIds,
@@ -116,11 +117,11 @@ class DevTools<AppAction, AppState> {
                                 currentStateIndex = Math.min(liftedState.currentStateIndex, filteredStagedActionIds.size - 1)
                         )
                     }
-                    is DevToolAction.PerformAction<*> -> {
+                    is DevToolAction.PerformAppAction<*> -> {
                         // Unfortunately, type is erased
-                        val appAction = liftedAction.appAction as AppAction
+                        val appAction = liftedAction.appAction as A
                         liftedState.copy(
-                                actionsById = liftedState.actionsById.plus(Pair(liftedState.nextActionId, DevToolAction.PerformAction(appAction)))
+                                actionsById = liftedState.actionsById.plus(Pair(liftedState.nextActionId, DevToolAction.PerformAppAction(appAction)))
                         )
                     }
                 }
@@ -130,14 +131,14 @@ class DevTools<AppAction, AppState> {
             }
         }
 
-        fun liftState(appState: AppState) =
-                DevToolState<AppAction, AppState> (committedState = appState)
+        fun liftState(appState: S) =
+                DevToolState<A, S> (committedState = appState)
 
-        fun unliftState(liftedState: DevToolState<AppAction, AppState>) =
+        fun unliftState(liftedState: DevToolState<A, S>) =
                 liftedState.computedStates[liftedState.currentStateIndex]
 
-        fun unliftStore(liftedStore: Store<DevToolAction, DevToolState<AppAction, AppState>>) = object : Store<AppAction, AppState> {
-            override fun dispatch(action: AppAction) = liftedStore.dispatch(liftAction(action))
+        fun unliftStore(liftedStore: Store<DevToolAction, DevToolState<A, S>>) = object : Store<A, S> {
+            override fun dispatch(action: A) = liftedStore.dispatch(liftAction(action))
 
             override var state = unliftState(liftedStore.state)
                 get() = unliftState(liftedStore.state)
@@ -147,9 +148,11 @@ class DevTools<AppAction, AppState> {
             override fun unsubscribe(subscriber: Subscriber) = liftedStore.unsubscribe(subscriber)
         }
 
-        return { reducer, initialState ->
-            liftedStore = createStore(liftState(initialState), liftReducerWith(reducer, initialState))
-            unliftStore(liftedStore)
+        return {
+            createStore -> { state, reducer ->
+                liftedStore = createStore(liftState(state), liftReducerWith(reducer, state))
+                unliftStore(liftedStore)
+            }
         }
     }
 }

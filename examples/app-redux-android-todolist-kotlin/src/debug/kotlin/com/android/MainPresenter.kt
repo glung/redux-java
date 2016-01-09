@@ -7,7 +7,8 @@ import com.redux.TodoListState
 
 import javax.inject.Inject
 
-public class MainPresenter @Inject constructor(private val devToolPresenter: DevToolPresenter<TodoListAction, TodoListState>) {
-
-    public fun bind(activity: BaseActivity) = devToolPresenter.bind(activity.findViewById(R.id.dev_tools_drawer))
+public class MainPresenter @Inject constructor() {
+// private val devToolPresenter: DevToolPresenter<TodoListAction, TodoListState>
+    public fun bind(activity: BaseActivity) {}
+            //= devToolPresenter.bind(activity.findViewById(R.id.dev_tools_drawer))
 }

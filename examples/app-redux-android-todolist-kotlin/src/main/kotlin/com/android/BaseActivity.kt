@@ -13,8 +13,4 @@ public open class BaseActivity : AppCompatActivity() {
         Application.getObjectGraph().inject(this)
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        presenter.bind(this)
-    }
 }
