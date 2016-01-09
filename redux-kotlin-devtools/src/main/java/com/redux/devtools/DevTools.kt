@@ -140,7 +140,8 @@ class DevTools<AppAction, AppState> {
         fun unliftStore(liftedStore: Store<DevToolAction, DevToolState<AppAction, AppState>>) = object : Store<AppAction, AppState> {
             override fun dispatch(action: AppAction) = liftedStore.dispatch(liftAction(action))
 
-            override fun getState() = unliftState(liftedStore.getState())
+            override var state = unliftState(liftedStore.state)
+                get() = unliftState(liftedStore.state)
 
             override fun subscribe(subscriber: Subscriber) = liftedStore.subscribe(subscriber)
 

@@ -3,10 +3,11 @@ package com.redux
 import java.util.concurrent.atomic.AtomicBoolean
 
 interface Store<Action, State> {
+    val state: State
+
     fun subscribe(subscriber: Subscriber): Boolean
     fun unsubscribe(subscriber: Subscriber): Boolean
     fun dispatch(action: Action): Unit
-    fun getState(): State
 }
 
 //TODO : init ?
@@ -26,20 +27,18 @@ fun <Action, State> createStore(initialState: State, reducer: (Action, State) ->
     }
 
     return object : Store<Action, State> {
+        override var state = initialState
         val subscribers = arrayListOf<Subscriber>()
-        val _reducer = createSafeReducer(reducer) // use _ to avoid name clash
-        var _state = initialState; // use _ to avoid name clash
+        val safeReducer = createSafeReducer(reducer)
 
         override fun subscribe(subscriber: Subscriber) = subscribers.add(subscriber)
 
         override fun unsubscribe(subscriber: Subscriber) = subscribers.remove(subscriber)
 
         override fun dispatch(action: Action) {
-            _state = _reducer(action, _state)
+            state = safeReducer(action, state)
             notifyStateChanged()
         }
-
-        override fun getState() = _state
 
         private fun notifyStateChanged() = subscribers.forEach { it.onStateChanged() }
 
