@@ -20,7 +20,7 @@ import javax.inject.Inject
 public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject lateinit var context: Context
-    @Inject lateinit var store: Store<AppAction, AppState>
+    @Inject lateinit var store: Store<TodoListAction, TodoListState>
     @Inject lateinit var actionCreator: ActionCreator
     private lateinit var adapter: MyAdapter
 
