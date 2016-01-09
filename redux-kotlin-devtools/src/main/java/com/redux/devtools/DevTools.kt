@@ -2,7 +2,6 @@ package com.redux.devtools
 
 import com.redux.Store
 import com.redux.Subscriber
-import com.redux.createStore
 
 // action creator
 sealed class DevToolAction() {
@@ -35,9 +34,9 @@ data class DevToolState<AppAction, AppState>(
 class DevTools<AppAction, AppState> {
     lateinit var liftedStore: Store<DevToolAction, DevToolState<AppAction, AppState>>
 
-    fun instrument() = { -> createInstrumentedStore() }
-
-    fun createInstrumentedStore(): ((AppAction, AppState) -> AppState, AppState) -> Store<AppAction, AppState> {
+    fun instrument(
+            createStore: (DevToolState<AppAction, AppState>, (DevToolAction, DevToolState<AppAction, AppState>) -> DevToolState<AppAction, AppState>) -> Store<DevToolAction, DevToolState<AppAction, AppState>>
+    ): ((AppAction, AppState) -> AppState, AppState) -> Store<AppAction, AppState> {
 
         /**
          * Runs the reducer on invalidated actions to get a fresh computation log.
