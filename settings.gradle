@@ -1,4 +1,4 @@
 include ':redux-kotlin'
-include ':redux-java-devtools'
+include ':redux-kotlin-devtools'
 include ':redux-java-devtools-ui-android'
 include ':examples:app-redux-android-todolist-kotlin'

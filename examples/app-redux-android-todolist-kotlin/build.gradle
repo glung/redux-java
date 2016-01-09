@@ -50,7 +50,7 @@ buildscript {
 dependencies {
     kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
 
-    debugCompile project(":redux-java-devtools")
+    debugCompile project(':redux-kotlin-devtools')
     debugCompile project(":redux-java-devtools-ui-android")
     compile project(":redux-kotlin")
 
