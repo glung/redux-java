@@ -1,12 +1,18 @@
 package com.android
 
-import com.redux.TodoListAction
-import com.redux.TodoListState
-import com.redux.createStore
+import com.android.todolist.BuildConfig
+import com.redux.*
 import com.redux.devtools.DevTools
-import com.redux.todoListReducer
 
 val devTools = DevTools<TodoListAction, TodoListState>()
-val createStoreForDev = devTools.instrument()({ state, reducer -> createStore(state, reducer) })
+val instrument = devTools.instrument()({ initAction, initState, reducer -> createStore(initAction, initState, reducer) })
 
-fun configureStore(initialState: TodoListState) = createStoreForDev(initialState, todoListReducer)
+fun configureProdStore(initialState: TodoListState): Store<TodoListAction, TodoListState>
+        = createStore(TodoListAction.Init, initialState, todoListReducer)
+
+fun configureDevStore(initialState: TodoListState)
+        = instrument(TodoListAction.Init, initialState, todoListReducer)
+
+fun configureStore(initialState: TodoListState): Store<TodoListAction, TodoListState> =
+        if (BuildConfig.DEBUG) configureDevStore(initialState)
+        else configureProdStore(initialState)

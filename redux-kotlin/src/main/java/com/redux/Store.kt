@@ -2,16 +2,20 @@ package com.redux
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface Store<Action, State> {
-    val state: State
-
-    fun subscribe(subscriber: Subscriber): Boolean
-    fun unsubscribe(subscriber: Subscriber): Boolean
-    fun dispatch(action: Action): Unit
+interface Subscription {
+    fun unsubscribe()
 }
 
-//TODO : init ?
-fun <Action, State> createStore(initialState: State, reducer: (Action, State) -> State): Store<Action, State> {
+interface Store<Action, State> {
+    fun subscribe(subscriber: () -> Unit): Subscription
+    fun dispatch(action: Action): Unit
+    fun getState(): State
+}
+
+fun <Action, State> createStore(
+        initAction: Action,
+        initialState: State,
+        reducer: (Action, State) -> State): Store<Action, State> {
     fun createSafeReducer(reducer: (Action, State) -> State): (Action, State) -> State {
         val isReducing = AtomicBoolean(false)
 
@@ -26,21 +30,33 @@ fun <Action, State> createStore(initialState: State, reducer: (Action, State) ->
         }
     }
 
-    return object : Store<Action, State> {
-        override var state = initialState
-        val subscribers = arrayListOf<Subscriber>()
+    val store = object : Store<Action, State> {
+        var _state = initialState
+        val subscribers : MutableList<() -> Unit> = arrayListOf()
         val safeReducer = createSafeReducer(reducer)
 
-        override fun subscribe(subscriber: Subscriber) = subscribers.add(subscriber)
+        override fun subscribe(subscriber: () -> Unit): Subscription {
+            subscribers.add(subscriber)
 
-        override fun unsubscribe(subscriber: Subscriber) = subscribers.remove(subscriber)
+            return object : Subscription {
+                override fun unsubscribe() {
+                    subscribers.remove(subscriber)
+                }
+            }
+        }
 
         override fun dispatch(action: Action) {
-            state = safeReducer(action, state)
+            _state = safeReducer(action, _state)
             notifyStateChanged()
         }
 
-        private fun notifyStateChanged() = subscribers.forEach { it.onStateChanged() }
+        fun notifyStateChanged() {
+            subscribers.forEach { it() }
+        }
+
+        override fun getState() = _state
 
     }
+    store.dispatch(initAction);
+    return store
 }

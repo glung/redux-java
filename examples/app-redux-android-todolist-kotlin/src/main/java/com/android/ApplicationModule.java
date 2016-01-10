@@ -6,6 +6,8 @@ import com.redux.Store;
 import com.redux.TodoListAction;
 import com.redux.TodoListState;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,7 +24,7 @@ public class ApplicationModule {
         return application;
     }
 
-    @Provides Store<TodoListAction, TodoListState> provideStore() {
+    @Singleton @Provides Store<TodoListAction, TodoListState> provideStore() {
         return ConfigureStoreKt.configureStore(new TodoListState());
     }
 }

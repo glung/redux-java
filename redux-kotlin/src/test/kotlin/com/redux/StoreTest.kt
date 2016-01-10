@@ -9,24 +9,26 @@ class StoreTest {
 
     @test fun actionShouldBeReduced() {
 
-        val store = Store<MyAction, MyState>(MyState.INIT) { action, state ->
+        val store = createStore<MyAction, MyState>(MyAction.INIT, MyState.EMPTY, { action: MyAction, state: MyState ->
             when (action) {
+                MyAction.INIT -> MyState.EMPTY
                 MyAction.ACTION -> MyState.REDUCED
             }
-        }
+        })
 
         store.dispatch(MyAction.ACTION)
 
-        assertEquals(MyState.REDUCED, store.state)
+        assertEquals(MyState.REDUCED, store.getState())
     }
 
     @test fun storeShouldNotifySubscribers() {
-        val store = Store<MyAction, MyState>(MyState.INIT) { action, state -> MyState.REDUCED }
-        val subscriber1 = TestSubscriber()
-        val subscriber2 = TestSubscriber()
+        val store = createStore<MyAction, MyState>(MyAction.INIT, MyState.EMPTY) { action, state -> MyState.REDUCED }
 
-        store.subscribe(subscriber1)
-        store.subscribe(subscriber2)
+        val subscriber1 = makeTestSubscriber()
+        val subscriber2 = makeTestSubscriber()
+
+        store.subscribe(subscriber1.subscriber)
+        store.subscribe(subscriber2.subscriber)
         store.dispatch(MyAction.ACTION)
 
         assertTrue(subscriber1.called)
@@ -35,13 +37,12 @@ class StoreTest {
 
     @test fun storeShouldNotNotifyWhenUnsubscribed() {
         val reducer = { action: MyAction, state: MyState -> MyState.REDUCED }
-        val store = Store(MyState.INIT, reducer)
-        val subscriber1 = TestSubscriber()
-        val subscriber2 = TestSubscriber()
+        val store = createStore<MyAction, MyState>(MyAction.INIT, MyState.EMPTY, reducer)
+        val subscriber1 = makeTestSubscriber()
+        val subscriber2 = makeTestSubscriber()
 
-        store.subscribe(subscriber1)
-        store.subscribe(subscriber2)
-        store.unsubscribe(subscriber2)
+        store.subscribe(subscriber1.subscriber)
+        store.subscribe(subscriber2.subscriber).unsubscribe()
         store.dispatch(MyAction.ACTION)
 
         assertTrue(subscriber1.called)
@@ -49,18 +50,20 @@ class StoreTest {
     }
 
     sealed class MyAction {
+        object INIT : MyAction()
+
         object ACTION : MyAction()
     }
 
     sealed class MyState {
-        object INIT : MyState()
+        object EMPTY : MyState()
+
         object REDUCED : MyState()
     }
 
-    class TestSubscriber(var called : Boolean = false) : Subscriber {
-
-        override fun onStateChanged() {
-            called = true;
-        }
-    }
+    private fun makeTestSubscriber() =
+            object {
+                var called = false
+                val subscriber = { -> called = true }
+            }
 }
