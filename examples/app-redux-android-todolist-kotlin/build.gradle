@@ -58,7 +58,9 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     compile "com.google.guava:guava:$rootProject.guavaVersion"
     compile "com.squareup.dagger:dagger:$rootProject.daggerVersion"
-    compile "com.google.code.gson:gson:$rootProject.gsonVersion"
+    compile "io.reactivex:rxjava:$rootProject.rxjavaVersion"
+    compile "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
     compile "com.github.salomonbrys.kotson:kotson:$rootProject.kotsonVersion"
 

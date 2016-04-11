@@ -29,9 +29,9 @@ ext {
     assertjVersion = '1.7.1'
     rxjavaVersion = '1.0.14'
     rxandroidVersion = '1.0.1'
-    kotsonVersion = '1.0.1'
     junitVersion = '4.12'
     kotlinVersion = '1.0.1-2'
+    kotsonVersion = '2.2.0'
 
 
 }
