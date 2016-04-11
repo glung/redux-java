@@ -9,14 +9,14 @@ Like the initial version of [Redux (for JavaScript apps)] (https://github.com/ra
 ![devtools-android-ui demo gif](docs/devtools-ui-android.gif)
 
 # Principles 
-When using Redux-java your application logic is at the center but isolated from the context of excution, such as the platform specifics. Tipically on Android, none of your application logic should depend on Android.
+When using Redux-java your application logic is at the center but isolated from the context of execution, such as the platform specifics. Tipically on Android, none of your application logic should depend on Android.
 
 To accomplish this, Redux takes actions as input and provides a global state as the output. The actions are reduced to states using pure functions. This is why your application states are predictables and easy to test. 
 
 Redux has a unidirectional data flow (from the action to the state) which make it fairly easy to understand. 
 
 # Android 
-Redux-java as been designed with Android in mind. It is pure Java and is designed to work well with Kotlin (which I think is a better choice to write your reducers). Therefore, the tests are written in Kotlin, but this is not a runtime dependency.
+Redux-java has been designed with Android in mind. It is pure Java and is designed to work well with Kotlin (which I think is a better choice to write your reducers). Therefore, the tests are written in Kotlin, but this is not a runtime dependency.
 
 # Project 
 The project is in early developent and is not yet released.
