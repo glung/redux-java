@@ -4,12 +4,12 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 13
-        targetSdkVersion 22
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -17,6 +17,7 @@ android {
 
 dependencies {
     compile project(":redux-java-devtools")
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+
 }

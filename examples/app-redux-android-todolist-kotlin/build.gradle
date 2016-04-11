@@ -5,13 +5,13 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.example.todolist_kotlin"
-        minSdkVersion 15
-        targetSdkVersion 22
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -38,12 +38,11 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.0.1-2'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.kotlinVersion"
     }
 }
 
@@ -54,17 +53,15 @@ dependencies {
     debugCompile project(":redux-java-devtools-ui-android")
     compile project(":redux-java")
 
-    compile 'com.android.support:support-v4:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.google.guava:guava:18.0'
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    compile 'io.reactivex:rxjava:1.0.14'
-    compile 'io.reactivex:rxandroid:1.0.1'
+    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile "com.google.guava:guava:$rootProject.guavaVersion"
+    compile "com.squareup.dagger:dagger:$rootProject.daggerVersion"
+    compile "com.google.code.gson:gson:$rootProject.gsonVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
+    compile "com.github.salomonbrys.kotson:kotson:$rootProject.kotsonVersion"
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.github.salomonbrys.kotson:kotson:1.3.0'
-
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:1.7.1'
+    testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.assertj:assertj-core:$rootProject.assertjVersion"
 }

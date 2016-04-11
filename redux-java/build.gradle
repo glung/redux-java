@@ -9,18 +9,17 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.0.1-2'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.kotlinVersion"
     }
 }
 
 dependencies {
     compile project(":guava-mini")
 
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testCompile 'junit:junit:4.12'
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
+    testCompile "junit:junit:$rootProject.junitVersion"
 }

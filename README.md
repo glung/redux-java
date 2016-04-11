@@ -1,5 +1,6 @@
 # redux-java
-The java version of Redux : a predictable state container for java apps. 
+# redux-java
+The java version of Redux : a predictable state container for java apps.
 
 Redux-java has been designed Android in mind but is not constrained to it (Java7, no dependency on Android but an Android dev tools UI is available) 
 
@@ -8,7 +9,7 @@ Like the initial version of [Redux (for JavaScript apps)] (https://github.com/ra
 ![devtools-android-ui demo gif](docs/devtools-ui-android.gif)
 
 # Principles 
-When using Redux-java your application logic is at the center but isolated from the context of excution, such as the platform specifics. Tipically on Android, none of your application logic should depend on Android. 
+When using Redux-java your application logic is at the center but isolated from the context of excution, such as the platform specifics. Tipically on Android, none of your application logic should depend on Android.
 
 To accomplish this, Redux takes actions as input and provides a global state as the output. The actions are reduced to states using pure functions. This is why your application states are predictables and easy to test. 
 
