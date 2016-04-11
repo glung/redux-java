@@ -145,7 +145,7 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
             deleteButton.setOnClickListener(onClickDeleteTodo)
         }
 
-        override fun getItemCount() = todoList.size()
+        override fun getItemCount() = todoList.size
 
     }
 
