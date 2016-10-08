@@ -1,7 +1,6 @@
 language: android
 android:
   components:
-    components:
     - tools                 # add this line if you want to use the lates build tools
     - build-tools-23.0.3    # add this line if you want to use the lates build tools
     - android-23
