@@ -1,9 +1,9 @@
 package com.redux
 
-public sealed class AppAction : Action {
+sealed class AppAction : Action {
 
-    public object Init : AppAction()
-    public class Add(val text: String, val isCompleted: Boolean) : AppAction()
+    object Init : AppAction()
+     class Add(val text: String, val isCompleted: Boolean) : AppAction()
      class Delete(val id: Int) : AppAction()
 
      class Complete(val id: Int, val isCompleted: Boolean) : AppAction()
