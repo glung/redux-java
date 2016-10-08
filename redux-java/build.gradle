@@ -21,9 +21,11 @@ dependencies {
     compile project(":guava-mini")
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
 }
