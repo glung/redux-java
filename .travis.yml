@@ -1,8 +1,10 @@
 language: android
 android:
   components:
-    - build-tools-22.0.1
-    - android-22
+    components:
+    - tools                 # add this line if you want to use the lates build tools
+    - build-tools-23.0.3    # add this line if you want to use the lates build tools
+    - android-23
     - extra-google-m2repository
     - extra-android-m2repository
 
