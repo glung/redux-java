@@ -9,7 +9,6 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '0.13.1513'
     repositories {
         mavenCentral()
     }
@@ -23,4 +22,8 @@ dependencies {
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }

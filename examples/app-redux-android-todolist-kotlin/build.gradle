@@ -38,7 +38,6 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '0.13.1513'
     repositories {
         mavenCentral()
     }
@@ -63,7 +62,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.github.salomonbrys.kotson:kotson:1.3.0'
+    compile "com.github.salomonbrys.kotson:kotson:$kotson_version"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:1.7.1'
