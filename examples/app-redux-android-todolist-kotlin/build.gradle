@@ -31,6 +31,10 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
         release.java.srcDirs += 'src/release/kotlin'
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 repositories {
