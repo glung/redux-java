@@ -1,14 +1,13 @@
 package com.redux
 
-import com.redux
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-public class TodoReducerTest {
+class TodoReducerTest {
 
     @Test fun testAddTodoAction() {
         assertThat(
-                redux.reducer.call(AppAction.Add("test", false), AppState()).list
+                reducer.call(AppAction.Add("test", false), AppState()).list
         ).containsExactly(Todo(0, "test", false))
     }
 
@@ -16,7 +15,7 @@ public class TodoReducerTest {
         val todo = Todo(1, "test", true)
         val state = AppState(listOf(todo))
 
-        assertThat(redux.reducer.call(AppAction.Delete(todo.id), state).list).isEmpty()
+        assertThat(reducer.call(AppAction.Delete(todo.id), state).list).isEmpty()
     }
 
     @Test fun testCompleteTodoAction() {
@@ -24,7 +23,7 @@ public class TodoReducerTest {
         val state = AppState(listOf(todo))
 
         assertThat(
-                redux.reducer.call(AppAction.Complete(todo.id, true), state).list
+                reducer.call(AppAction.Complete(todo.id, true), state).list
         ).containsExactly(Todo(1, "test", true))
     }
 
@@ -33,7 +32,7 @@ public class TodoReducerTest {
         val state = AppState(listOf(todo))
 
         assertThat(
-                redux.reducer.call(AppAction.Complete(todo.id, false), state).list
+                reducer.call(AppAction.Complete(todo.id, false), state).list
         ).containsExactly(Todo(1, "test", false))
     }
 
@@ -44,7 +43,7 @@ public class TodoReducerTest {
         val state = AppState(listOf(todo1, todo2, todo3))
 
         assertThat(
-                redux.reducer.call(AppAction.CompleteAll(true), state).list
+                reducer.call(AppAction.CompleteAll(true), state).list
         ).containsExactly(
                 Todo(1, "test1", true),
                 Todo(2, "test2", true),
@@ -60,7 +59,7 @@ public class TodoReducerTest {
         val state = AppState(listOf(todo1, todo2, todo3))
 
         assertThat(
-                redux.reducer.call(AppAction.CompleteAll(false), state).list
+                reducer.call(AppAction.CompleteAll(false), state).list
         ).containsExactly(
                 Todo(1, "test1", false),
                 Todo(2, "test2", false),
@@ -75,7 +74,7 @@ public class TodoReducerTest {
         val state = AppState(listOf(todo1, todo2, todo3))
 
         assertThat(
-                redux.reducer.call(AppAction.ClearCompleted, state).list
+                reducer.call(AppAction.ClearCompleted, state).list
         ).containsExactly(
                 Todo(1, "test1", false),
                 Todo(3, "test3", false)
