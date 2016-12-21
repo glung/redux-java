@@ -1,7 +1,8 @@
 # DEPRECATED! 
 
-This repo is deprecated but i very likely to come back later. 
-Advanture are continuing here https://github.com/jvm-redux/ for now.
+This repo is deprecated but is very likely to come back later. 
+
+For the time being, the adventure is continuing here https://github.com/jvm-redux/.
 
 # redux-java
 The java version of Redux : a predictable state container for java apps. 
