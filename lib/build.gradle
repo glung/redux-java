@@ -1,0 +1,25 @@
+group 'glung.redux_java2'
+version '2.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    //    todo
+    //    compile 'jvm-redux-api:api:1.2.0'
+    //    testompile 'jvm-redux-api:specs:1.2.0'
+    compile project(":api")
+    testCompile project(":specs")
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:1.7.1'
+    testCompile 'org.mockito:mockito-core:2.2.16'
+
+}

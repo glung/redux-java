@@ -1,0 +1,19 @@
+group 'glung.redux_java2'
+version '2.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":api")
+    compile 'junit:junit:4.12'
+    compile 'org.assertj:assertj-core:1.7.1'
+    compile 'org.mockito:mockito-core:2.2.16'
+//    testCompile 'org.jetbrains:annotations:13.0'
+}
