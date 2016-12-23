@@ -25,9 +25,14 @@ class Store<S> implements redux.api.Store<S> {
     }
 
     @Override
-    public Subscription subscribe(Subscriber subscriber) {
+    public Subscription subscribe(final Subscriber subscriber) {
         subscribers.add(subscriber);
-        return () -> subscribers.remove(subscriber);
+        return new Subscription() {
+            @Override
+            public void unsubscribe() {
+                subscribers.remove(subscriber);
+            }
+        };
     }
 
     @Override
@@ -42,13 +47,20 @@ class Store<S> implements redux.api.Store<S> {
 
     @Override
     public Object dispatch(Object action) {
-        checkIsNotReducing();
+        assertIsNotReducing();
+        
         currentState = reduce(action);
-        new ArrayList<>(subscribers).forEach(Subscriber::onStateChanged);
+        notifySubscribers();
         return action;
     }
 
-    private void checkIsNotReducing() {
+    private void notifySubscribers() {
+        for (Subscriber subscriber : new ArrayList<>(subscribers)) {
+            subscriber.onStateChanged();
+        }
+    }
+
+    private void assertIsNotReducing() {
         if (isReducing.get()) {
             throw new IllegalStateException("Already reducing");
         }
