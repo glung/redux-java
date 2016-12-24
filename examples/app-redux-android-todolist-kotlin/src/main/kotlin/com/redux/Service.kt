@@ -19,7 +19,7 @@ public class Service @Inject constructor() {
         val size = random.nextInt(4)
         val todos = ArrayList<Todo>(size)
         repeat(size) {
-            todos.add(Todo(NOT_SET, LIST_OF_TODO[random.nextInt(LIST_OF_TODO.size())], random.nextBoolean()))
+            todos.add(Todo(NOT_SET, LIST_OF_TODO[random.nextInt(LIST_OF_TODO.size)], random.nextBoolean()))
         }
 
         return todos
