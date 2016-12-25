@@ -2,7 +2,7 @@
 
 This repo is deprecated but is very likely to come back later. 
 
-For the time being, the adventure is continuing here https://github.com/jvm-redux/.
+For the time being, the adventure is continuing here https://github.com/glung/redux-java/tree/1.x
 
 # redux-java
 The java version of Redux : a predictable state container for java apps. 
