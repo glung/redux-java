@@ -2,7 +2,8 @@ package com.redux.draw.model;
 
 import com.google.common.primitives.Floats;
 
-import static mini.com.google.common.base.Preconditions.checkState;
+import static com.redux.utils.Preconditions.checkState;
+
 
 public class MyPath {
 
