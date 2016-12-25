@@ -35,5 +35,5 @@ The project is in early developent and is not yet released.
 # Notes
 - If you are not familiar with unidirectional data flow, I recommand readling the [Facebook flux documentation](https://facebook.github.io/flux/). 
 - Redux is a simplification of flux created by [Dan Abramov](https://twitter.com/dan_abramov), I also recommend watching this [30' video](https://www.youtube.com/watch?v=xsSnOQynTHs) to understand the principle and motivations of redux.
-- The official and great redux documentation is [here](http://rackt.github.io/redux/docs/introduction/Motivation.html)
+- The official and great redux documentation is [here](http://redux.js.org)
 
