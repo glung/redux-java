@@ -1,20 +1,18 @@
 package com.redux
 
-val reducer: Reducer<AppAction, AppState> = Reducer({ action: AppAction, state: AppState ->
+val todoListReducer = { action: TodoListAction, state: TodoListState ->
 
     fun nextFreeIndex(list: List<Todo>): Int {
         return if (list.isEmpty()) 0 else list.last().id + 1;
     }
 
     when (action) {
-        is AppAction.Init -> state
-        is AppAction.Add -> state.copy(state.list + Todo(nextFreeIndex(state.list), action.text, action.isCompleted))
-        is AppAction.Delete -> state.copy(state.list.filter { it.id != action.id })
-        is AppAction.Complete -> state.copy(state.list.map { if (it.id == action.id) it.copy(isCompleted = action.isCompleted) else it })
-        is AppAction.CompleteAll -> state.copy(state.list.map { it.copy(isCompleted = action.isCompleted) })
-        is AppAction.ClearCompleted -> state.copy(state.list.filter { it.isCompleted.not() })
-        is AppAction.Fetching -> state.copy(isFetching = action.isFetching)
+        is TodoListAction.Init -> state
+        is TodoListAction.Add -> state.copy(state.list + Todo(nextFreeIndex(state.list), action.text, action.isCompleted))
+        is TodoListAction.Delete -> state.copy(state.list.filter { it.id != action.id })
+        is TodoListAction.Complete -> state.copy(state.list.map { if (it.id == action.id) it.copy(isCompleted = action.isCompleted) else it })
+        is TodoListAction.CompleteAll -> state.copy(state.list.map { it.copy(isCompleted = action.isCompleted) })
+        is TodoListAction.ClearCompleted -> state.copy(state.list.filter { it.isCompleted.not() })
+        is TodoListAction.Fetching -> state.copy(isFetching = action.isFetching)
     }
-})
-
-
+}

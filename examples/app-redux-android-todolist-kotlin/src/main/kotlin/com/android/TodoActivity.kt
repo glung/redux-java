@@ -17,13 +17,13 @@ import com.redux.*
 import javax.inject.Inject
 
 
-public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRefreshListener {
+public class TodoActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     @Inject lateinit var context: Context
-    @Inject lateinit var store: Store<AppAction, AppState>
+    @Inject lateinit var store: Store<TodoListAction, TodoListState>
     @Inject lateinit var actionCreator: ActionCreator
     private lateinit var adapter: MyAdapter
-    private var subscription: Subscription = Subscription.empty();
+    private lateinit var subscription : Subscription// empty subscription ?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +73,7 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
 
     private fun setupRecycler() {
         adapter = MyAdapter(
-                store.state.list,
+                store.getState().list,
                 resources,
                 { compoundButton: CompoundButton, isMarked: Boolean -> actionCreator.complete(compoundButton.tag as Int, isMarked) },
                 { v: View -> actionCreator.delete(v.tag as Int) }
@@ -90,7 +90,7 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
 
         editText().showKeyboard(context)
         bind()
-        subscription = store.subscribe(this)
+        subscription = store.subscribe { bind() }
     }
 
     override fun onPause() {
@@ -98,12 +98,10 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
         super.onPause()
     }
 
-    override fun onStateChanged() = bind()
-
     private fun bind() {
-        swipeRefreshLayout().isRefreshing = store.state.isFetching
+        swipeRefreshLayout().isRefreshing = store.getState().isFetching
 
-        val todoList = store.state.list
+        val todoList = store.getState().list
         val markAllView = markAllCheckBox()
         markAllView.isEnabled = todoList.isEmpty().not()
         markAllView.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean -> }
@@ -145,7 +143,7 @@ public class TodoActivity : BaseActivity(), Subscriber, SwipeRefreshLayout.OnRef
             deleteButton.setOnClickListener(onClickDeleteTodo)
         }
 
-        override fun getItemCount() = todoList.size()
+        override fun getItemCount() = todoList.size
 
     }
 

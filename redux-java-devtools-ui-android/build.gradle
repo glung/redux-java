@@ -1,4 +1,8 @@
+plugins {
+    id "com.jfrog.bintray" version "1.3.1"
+}
 apply plugin: 'com.android.library'
+apply plugin: "maven-publish"
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -15,8 +19,45 @@ android {
     }
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty('bintrayUser')
+    key = properties.getProperty('bintrayApiKey')
+    pkg {
+        repo = BINTRAY_PKG_REPO
+        name = BINTRAY_PKG_NAME
+        userOrg = user
+        licenses = BINTRAY_PKG_LICENSES
+        vcsUrl = BINTRAY_PKG_VCS_URL
+
+        version {
+            name = BINTRAY_PKG_VERSION
+        }
+    }
+    publications = ['DevToolsAndroid']
+}
+
+publishing {
+    publications {
+        DevToolsAndroid(MavenPublication) {
+            groupId ARTIFACT_GROUP_ID
+            artifactId 'devtools-android-state-monitor'
+            version ARTIFACT_VERSION
+            artifact(sourceJar)
+            // TODO : update name
+            artifact("$buildDir/outputs/aar/redux-java-devtools-ui-android-release.aar")
+        }
+    }
+}
+
 dependencies {
-    compile project(":redux-java-devtools")
+    compile project(':redux-kotlin-devtools')
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
 }

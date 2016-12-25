@@ -1,0 +1,55 @@
+buildscript {
+    ext.kotlin_version = '1.0.0-beta-4584'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.3.1"
+}
+apply plugin: 'kotlin'
+apply plugin: "maven-publish"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty('bintrayUser')
+    key = properties.getProperty('bintrayApiKey')
+    pkg {
+        repo = BINTRAY_PKG_REPO
+        name = BINTRAY_PKG_NAME
+        userOrg = user
+        licenses = BINTRAY_PKG_LICENSES
+        vcsUrl = BINTRAY_PKG_VCS_URL
+
+        version {
+            name = BINTRAY_PKG_VERSION
+        }
+    }
+    publications = ['DevTools']
+}
+
+publishing {
+    publications {
+        DevTools(MavenPublication) {
+            from components.java
+            groupId ARTIFACT_GROUP_ID
+            artifactId 'devtools'
+            version ARTIFACT_VERSION
+        }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compile project(":redux-kotlin")
+    compile 'com.google.code.gson:gson:2.3.1'
+}
