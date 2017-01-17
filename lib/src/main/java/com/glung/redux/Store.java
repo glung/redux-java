@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-class Store<S> implements redux.api.Store<S> {
+public class Store<S> implements redux.api.Store<S> {
 
     private final AtomicBoolean isReducing = new AtomicBoolean(false);
     private final List<Subscriber> subscribers = new ArrayList<>();
@@ -48,7 +48,7 @@ class Store<S> implements redux.api.Store<S> {
     @Override
     public Object dispatch(Object action) {
         assertIsNotReducing();
-        
+
         currentState = reduce(action);
         notifySubscribers();
         return action;
@@ -82,10 +82,10 @@ class Store<S> implements redux.api.Store<S> {
         isReducing.set(true);
     }
 
-    static class Creator<S> implements redux.api.Store.Creator<S> {
+    public static class Creator<S> implements redux.api.Store.Creator<S> {
 
         @Override
-        public redux.api.Store create(Reducer<S> reducer, S initialState) {
+        public redux.api.Store<S> create(Reducer<S> reducer, S initialState) {
             return new Store<S>(reducer, initialState);
         }
     }
