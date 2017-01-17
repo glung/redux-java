@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
+targetCompatibility = rootProject.ext.targetCompatibilityVersion
+
+repositories {
+  mavenCentral()
+  maven { url "https://jitpack.io" }
+}
+
+dependencies {
+  compile project(':lib')
+
+  compile 'com.github.jvm-redux.jvm-redux-api:api:1.2.0'
+  testCompile 'junit:junit:4.12'
+}

@@ -1,3 +1,4 @@
 rootProject.name = 'redux-java'
 include 'lib'
+include 'examples:basic'
 
