@@ -1,5 +1,3 @@
 rootProject.name = 'glung.redux_java2'
 include 'lib'
-include 'api'
-include 'specs'
 

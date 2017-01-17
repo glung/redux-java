@@ -6,20 +6,15 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
+  mavenLocal()
+  mavenCentral()
+  jcenter()
 }
 
 dependencies {
-    //    todo
-    //    compile 'jvm-redux-api:api:1.2.0'
-    //    testompile 'jvm-redux-api:specs:1.2.0'
-    compile project(":api")
-    testCompile project(":specs")
-//    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:1.7.1'
-    testCompile 'org.mockito:mockito-core:2.2.16'
+  compile 'jvm-redux-api:api:1.2.0'
 
+  testCompile 'jvm-redux-api:specs:1.2.0'
+  testCompile 'org.assertj:assertj-core:1.7.1'
+  testCompile 'org.mockito:mockito-core:2.2.16'
 }
