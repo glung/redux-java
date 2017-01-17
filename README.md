@@ -1,3 +1,4 @@
-▲▲▲ WIP ▲▲▲
+# ▲▲▲ Redux-java ▲▲▲
 
-This conversion aims to provide a Java store compliant to the jvm-redux specs: https://github.com/jvm-redux/.
+A java implementation of [jvm-redux-api](https://github.com/jvm-redux/jvm-redux-api)
+
