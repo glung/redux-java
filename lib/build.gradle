@@ -6,15 +6,12 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 
 repositories {
-  mavenLocal()
   mavenCentral()
-  jcenter()
+  maven { url "https://jitpack.io" }
 }
 
 dependencies {
-  compile 'jvm-redux-api:api:1.2.0'
+  compile 'com.github.jvm-redux.jvm-redux-api:api:1.2.0'
 
-  testCompile 'jvm-redux-api:specs:1.2.0'
-  testCompile 'org.assertj:assertj-core:1.7.1'
-  testCompile 'org.mockito:mockito-core:2.2.16'
+  testCompile 'com.github.jvm-redux.jvm-redux-api:specs:1.2.0'
 }
