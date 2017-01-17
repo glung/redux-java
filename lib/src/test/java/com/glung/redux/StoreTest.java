@@ -1,4 +1,4 @@
-package glung.redux_java2;
+package com.glung.redux;
 
 import redux.api.Reducer;
 
