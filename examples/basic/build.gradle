@@ -11,6 +11,6 @@ repositories {
 dependencies {
   compile project(':lib')
 
-  compile 'com.github.jvm-redux.jvm-redux-api:api:1.2.0'
+  compile     'com.github.jvm-redux.jvm-redux-api:api:creator-creates-store-with-reducer-type-SNAPSHOT'
   testCompile 'junit:junit:4.12'
 }
