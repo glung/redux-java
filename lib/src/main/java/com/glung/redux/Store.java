@@ -14,6 +14,11 @@ public class Store<S> implements redux.api.Store<S> {
     private Reducer<S> reducer;
     private S currentState;
 
+    public static <S> redux.api.Store<S> createStore(Reducer<S> reducer, S initialState, Enhancer enhancer) {
+        final redux.api.Store.Creator creator = enhancer != null ? enhancer.enhance(new Creator()) : new Creator();
+        return creator.create(reducer, initialState);
+    }
+
     Store(Reducer<S> reducer, S initialState) {
         this.currentState = initialState;
         setReducer(reducer);
