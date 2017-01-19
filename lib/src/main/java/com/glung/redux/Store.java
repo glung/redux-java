@@ -82,11 +82,11 @@ public class Store<S> implements redux.api.Store<S> {
         isReducing.set(true);
     }
 
-    public static class Creator<S> implements redux.api.Store.Creator<S> {
+    public static class Creator implements redux.api.Store.Creator {
 
         @Override
-        public redux.api.Store<S> create(Reducer<S> reducer, S initialState) {
-            return new Store<S>(reducer, initialState);
+        public <S> redux.api.Store<S> create(Reducer<S> reducer, S initialState) {
+            return new Store<>(reducer, initialState);
         }
     }
 }

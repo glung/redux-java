@@ -8,7 +8,7 @@ class ReduxApplication {
     private final redux.api.Store<Integer> store;
     private final PrintStream stream;
 
-    ReduxApplication(redux.api.Store.Creator<Integer> storeCreator, PrintStream stream) {
+    ReduxApplication(redux.api.Store.Creator storeCreator, PrintStream stream) {
         store = storeCreator.create(new MyReducer(), 0);
         this.stream = stream;
     }
