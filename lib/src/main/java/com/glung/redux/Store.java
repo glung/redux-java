@@ -47,7 +47,7 @@ public class Store<S> implements redux.api.Store<S> {
 
     private void setReducer(Reducer<S> reducer) {
         this.reducer = reducer;
-        this.reducer.reduce(currentState, redux.api.Store.INIT);
+        this.currentState = this.reducer.reduce(currentState, redux.api.Store.INIT);
     }
 
     @Override
