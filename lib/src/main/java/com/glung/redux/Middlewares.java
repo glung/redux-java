@@ -11,13 +11,13 @@ public class Middlewares {
 
     private static class MiddlewareStore<S> implements redux.api.Store<S> {
 
-        private final redux.api.Store<S> nextStore;
-        private final List<redux.api.enhancer.Middleware<S>> middlewares;
+        private final Dispatcher dispatcher;
+        private final Store<S> nextStore;
 
-        public MiddlewareStore(redux.api.Store<S> nextStore,
-                List<redux.api.enhancer.Middleware<S>> middlewares) {
+        private MiddlewareStore(Store<S> nextStore,
+                        Dispatcher dispatcher) {
             this.nextStore = nextStore;
-            this.middlewares = middlewares;
+            this.dispatcher = dispatcher;
         }
 
         @Override
@@ -37,38 +37,41 @@ public class Middlewares {
 
         @Override
         public Object dispatch(Object action) {
-            return createMiddlewareDispatcher(middlewares).dispatch(action);
+            return dispatcher.dispatch(action);
         }
 
-        private Dispatcher createMiddlewareDispatcher(final List<redux.api.enhancer.Middleware<S>> middlewares) {
-            if (middlewares.isEmpty()) {
-                return nextStore;
-            } else {
-                return new Dispatcher() {
-                    @Override
-                    public Object dispatch(Object action) {
-                        Middleware<S> nextMiddleware = middlewares.get(0);
-                        List<redux.api.enhancer.Middleware<S>> restMiddlewares = middlewares.subList(1, middlewares.size());
-                        return  nextMiddleware.dispatch(nextStore, createMiddlewareDispatcher(restMiddlewares), action);
-                    }
-                };
 
-            }
-        }
     }
 
-    @SafeVarargs
-    public static <S> redux.api.Store.Enhancer<S> applyMiddlewares(final redux.api.enhancer.Middleware<S>... middlewares) {
-        return new redux.api.Store.Enhancer<S>(){
+    public static <S> Store.Enhancer<S> applyMiddlewares(final Middleware<S>... middlewares) {
+        return new Store.Enhancer<S>(){
             @Override
             public Store.Creator<S> enhance(final Store.Creator<S> next) {
                 return new Store.Creator<S>() {
                     @Override
                     public Store<S> create(final Reducer<S> reducer,final S initialState) {
                         Store<S> store = next.create(reducer, initialState);
-                        return new MiddlewareStore<>(store, Arrays.asList(middlewares));
+                        return new MiddlewareStore<>(store, createMiddlewareDispatcher(Arrays.asList(middlewares), store));
                     }
                 };
+            }
+        };
+    }
+
+    private static <S> Dispatcher createMiddlewareDispatcher(final List<Middleware<S>> middlewares, final Store<S> nextStore){
+        Dispatcher currentDispatcher = nextStore;
+        for (int i = middlewares.size() - 1; i >= 0; i--) {
+            final Middleware<S> nextMiddleware = middlewares.get(i);
+            currentDispatcher = createNextDispatcher(nextStore, currentDispatcher, nextMiddleware);
+        }
+        return currentDispatcher;
+    }
+
+    private static <S> Dispatcher createNextDispatcher(final Store<S> nextStore, final Dispatcher lastDispatcher, final Middleware<S> nextMiddleware) {
+        return new Dispatcher() {
+            @Override
+            public Object dispatch(Object action) {
+                return nextMiddleware.dispatch(nextStore, lastDispatcher, action);
             }
         };
     }
