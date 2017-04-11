@@ -14,6 +14,11 @@ public class Store<S> implements redux.api.Store<S> {
     private Reducer<S> reducer;
     private S currentState;
 
+    public static <S> redux.api.Store<S> createStore(Reducer<S> reducer, S initialState, Enhancer enhancer) {
+        final redux.api.Store.Creator creator = enhancer != null ? enhancer.enhance(new Creator()) : new Creator();
+        return creator.create(reducer, initialState);
+    }
+
     Store(Reducer<S> reducer, S initialState) {
         this.currentState = initialState;
         setReducer(reducer);
@@ -42,7 +47,7 @@ public class Store<S> implements redux.api.Store<S> {
 
     private void setReducer(Reducer<S> reducer) {
         this.reducer = reducer;
-        this.reducer.reduce(currentState, redux.api.Store.INIT);
+        this.currentState = this.reducer.reduce(currentState, redux.api.Store.INIT);
     }
 
     @Override
@@ -82,11 +87,11 @@ public class Store<S> implements redux.api.Store<S> {
         isReducing.set(true);
     }
 
-    public static class Creator<S> implements redux.api.Store.Creator<S> {
+    public static class Creator implements redux.api.Store.Creator {
 
         @Override
-        public redux.api.Store<S> create(Reducer<S> reducer, S initialState) {
-            return new Store<S>(reducer, initialState);
+        public <S> redux.api.Store<S> create(Reducer<S> reducer, S initialState) {
+            return new Store<>(reducer, initialState);
         }
     }
 }
