@@ -9,6 +9,6 @@ repositories {
 }
 
 dependencies {
-  compile     'com.github.jvm-redux.jvm-redux-api:api:creator-creates-store-with-reducer-type-SNAPSHOT'
-  testCompile 'com.github.jvm-redux.jvm-redux-api:specs:creator-creates-store-with-reducer-type-SNAPSHOT'
+  compile     'com.github.jvm-redux.jvm-redux-api:api:2.0.0'
+  testCompile 'com.github.jvm-redux.jvm-redux-api:specs:2.0.0'
 }
