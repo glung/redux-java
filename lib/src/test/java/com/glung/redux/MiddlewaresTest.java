@@ -27,12 +27,12 @@ import java.util.List;
 public class MiddlewaresTest {
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-    @Mock private redux.api.Store.Creator<State> storeCreator;
+    @Mock private redux.api.Store.Creator storeCreator;
     @Mock private Store<State> storeMock;
 
     private final List<String> callOrderResult = new ArrayList<>();
 
-    private Store.Creator<State> enhancedStoreCreator() {
+    private Store.Creator enhancedStoreCreator() {
         when(storeCreator.create(any(Reducer.class), any(State.class))).thenReturn(storeMock);
 
         return applyMiddlewares(createMiddleware("ONE"),

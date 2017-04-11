@@ -43,15 +43,19 @@ public class Middlewares {
 
     }
 
-    public static <S> Store.Enhancer<S> applyMiddlewares(final Middleware<S>... middlewares) {
-        return new Store.Enhancer<S>() {
+    public static <T> Store.Enhancer applyMiddlewares(final Middleware<T>... middlewares) {
+        return new Store.Enhancer() {
             @Override
-            public Store.Creator<S> enhance(final Store.Creator<S> next) {
-                return new Store.Creator<S>() {
+            public Store.Creator enhance(final Store.Creator next) {
+                return new Store.Creator() {
                     @Override
-                    public Store<S> create(final Reducer<S> reducer, final S initialState) {
-                        Store<S> store = next.create(reducer, initialState);
-                        return new MiddlewareStore<>(store, createMiddlewareDispatcher(Arrays.asList(middlewares), store));
+                    public <S> Store<S> create(final Reducer<S> reducer, final S initialState) {
+                        final Store<S> store = next.create(reducer, initialState);
+                        // This is fqr from ideal but currently it is expected that the Middleware and the Reducer carry the same type.
+                        // This is checked at run time (cf down cast below)
+                        //
+                        // Revisit when needed
+                        return new MiddlewareStore<>(store, createMiddlewareDispatcher(Arrays.asList(middlewares), (Store<T>) store));
                     }
                 };
             }
