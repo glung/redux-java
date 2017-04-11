@@ -1,13 +1,21 @@
 package com.glung.redux;
 
-import org.junit.Before;
+import static com.glung.redux.Middlewares.applyMiddlewares;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static redux.api.helpers.ActionsCreator.addTodo;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import redux.api.*;
+import redux.api.Dispatcher;
+import redux.api.Reducer;
 import redux.api.Store;
 import redux.api.enhancer.Middleware;
 import redux.api.helpers.Reducers;
@@ -16,32 +24,21 @@ import redux.api.helpers.State;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static redux.api.helpers.ActionsCreator.addTodo;
-
 public class MiddlewaresTest {
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-    @Mock
-    private redux.api.Store.Creator<State> storeCreator;
-    @Mock
-    private Store<State> storeMock;
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock private redux.api.Store.Creator<State> storeCreator;
+    @Mock private Store<State> storeMock;
 
     private final List<String> callOrderResult = new ArrayList<>();
 
-    @Before
-    public void init(){
+    private Store.Creator<State> enhancedStoreCreator() {
         when(storeCreator.create(any(Reducer.class), any(State.class))).thenReturn(storeMock);
-    }
-    private Store<State> createStoreWithAppliedMiddlewares() {
-        Store.Enhancer<State> middlewareEnhancer = Middlewares. applyMiddlewares(createMiddleware("ONE"),
-                createMiddleware("TWO"), createMiddleware("THREE"));
-        Store.Creator<State> creatorWithMiddlewares = middlewareEnhancer.enhance(storeCreator);
-        return creatorWithMiddlewares.create(Reducers.TODOS, new State());
+
+        return applyMiddlewares(createMiddleware("ONE"),
+                                createMiddleware("TWO"),
+                                createMiddleware("THREE"))
+                .enhance(storeCreator);
     }
 
     private Middleware<State> createMiddleware(final String identifier) {
@@ -55,8 +52,8 @@ public class MiddlewaresTest {
     }
 
     @Test
-    public void dispatchInvokesMiddlewaresInCorrectOrder(){
-        Store<State> store = createStoreWithAppliedMiddlewares();
+    public void dispatchInvokesMiddlewaresInCorrectOrder() {
+        final Store<State> store = enhancedStoreCreator().create(Reducers.TODOS, new State());
 
         store.dispatch(addTodo("Test"));
 
@@ -64,11 +61,12 @@ public class MiddlewaresTest {
     }
 
     @Test
-    public void dispatchForwardsToTheOriginalStore(){
-        Object action = addTodo("Test");
-        Object expectedDispatchResult = new Object();
+    public void dispatchForwardsToTheOriginalStore() {
+        final Object action = addTodo("Test");
+        final Object expectedDispatchResult = new Object();
+        final Store<State> store = enhancedStoreCreator().create(Reducers.TODOS, new State());
         when(storeMock.dispatch(action)).thenReturn(expectedDispatchResult);
-        Store<State> store = createStoreWithAppliedMiddlewares();
+
         verifyZeroInteractions(storeMock);
 
         Object dispatchResult = store.dispatch(action);
@@ -77,8 +75,8 @@ public class MiddlewaresTest {
     }
 
     @Test
-    public void getStateForwardsToTheOriginalStore(){
-        Store<State> store = createStoreWithAppliedMiddlewares();
+    public void getStateForwardsToTheOriginalStore() {
+        final Store<State> store = enhancedStoreCreator().create(Reducers.TODOS, new State());
         verifyZeroInteractions(storeMock);
 
         store.getState();
@@ -87,8 +85,8 @@ public class MiddlewaresTest {
     }
 
     @Test
-    public void replaceReducerForwardsToTheOriginalStore(){
-        Store<State> store = createStoreWithAppliedMiddlewares();
+    public void replaceReducerForwardsToTheOriginalStore() {
+        final Store<State> store = enhancedStoreCreator().create(Reducers.TODOS, new State());
         verifyZeroInteractions(storeMock);
 
         store.replaceReducer(Reducers.TODOS_REVERSE);
@@ -97,17 +95,16 @@ public class MiddlewaresTest {
     }
 
     @Test
-    public void subscribeForwardsToTheOriginalStore(){
-        Store.Subscriber subscriber = mock(Store.Subscriber.class);
-        Store.Subscription expectedSubscription = mock(Store.Subscription.class);
+    public void subscribeForwardsToTheOriginalStore() {
+        final Store.Subscriber subscriber = mock(Store.Subscriber.class);
+        final Store.Subscription expectedSubscription = mock(Store.Subscription.class);
+        final Store<State> store = enhancedStoreCreator().create(Reducers.TODOS, new State());
         when(storeMock.subscribe(subscriber)).thenReturn(expectedSubscription);
-        Store<State> store = createStoreWithAppliedMiddlewares();
+
         verifyZeroInteractions(storeMock);
 
         Store.Subscription subscription = store.subscribe(subscriber);
 
         assertThat(subscription).isEqualTo(expectedSubscription);
     }
-
-
 }

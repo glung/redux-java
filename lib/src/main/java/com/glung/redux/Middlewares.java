@@ -1,11 +1,12 @@
 package com.glung.redux;
 
-import java.util.Arrays;
-import java.util.List;
-
-import redux.api.*;
+import redux.api.Dispatcher;
+import redux.api.Reducer;
 import redux.api.Store;
 import redux.api.enhancer.Middleware;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Middlewares {
 
@@ -15,7 +16,7 @@ public class Middlewares {
         private final Store<S> nextStore;
 
         private MiddlewareStore(Store<S> nextStore,
-                        Dispatcher dispatcher) {
+                                Dispatcher dispatcher) {
             this.nextStore = nextStore;
             this.dispatcher = dispatcher;
         }
@@ -40,16 +41,15 @@ public class Middlewares {
             return dispatcher.dispatch(action);
         }
 
-
     }
 
     public static <S> Store.Enhancer<S> applyMiddlewares(final Middleware<S>... middlewares) {
-        return new Store.Enhancer<S>(){
+        return new Store.Enhancer<S>() {
             @Override
             public Store.Creator<S> enhance(final Store.Creator<S> next) {
                 return new Store.Creator<S>() {
                     @Override
-                    public Store<S> create(final Reducer<S> reducer,final S initialState) {
+                    public Store<S> create(final Reducer<S> reducer, final S initialState) {
                         Store<S> store = next.create(reducer, initialState);
                         return new MiddlewareStore<>(store, createMiddlewareDispatcher(Arrays.asList(middlewares), store));
                     }
@@ -58,7 +58,7 @@ public class Middlewares {
         };
     }
 
-    private static <S> Dispatcher createMiddlewareDispatcher(final List<Middleware<S>> middlewares, final Store<S> nextStore){
+    private static <S> Dispatcher createMiddlewareDispatcher(final List<Middleware<S>> middlewares, final Store<S> nextStore) {
         Dispatcher currentDispatcher = nextStore;
         for (int i = middlewares.size() - 1; i >= 0; i--) {
             final Middleware<S> nextMiddleware = middlewares.get(i);
